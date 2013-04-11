@@ -12,6 +12,7 @@
 	<extension point="xbmc.addon.metadata">
 		<platform>all</platform>
 		<summary lang="en">Songza</summary>
-		<description lang="en">Access the Songza music service.[CR][CR]Any issues, ideas or any other comments, please visit:[CR]http://github.com/djcode/XBMC-Songza-Plugin/</description>
+		<description lang="en">Access the Songza music service.</description>
 	</extension>
+	<website>https://github.com/djcode/XBMC-Songza-Plugin/</website>
 </addon>
