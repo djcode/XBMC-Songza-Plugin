@@ -52,21 +52,30 @@ except:
         pass
 
 if mode==None:
-    listitem = xbmcgui.ListItem(day_name[sz_day]+" "+period_name[sz_period])
-    xbmcplugin.addDirectoryItem(int(sys.argv[1]), sys.argv[0]+'?mode=situation&sz_day='+str(sz_day)+'&sz_period='+str(sz_period), listitem, isFolder=True)
-    listitem = xbmcgui.ListItem('Choose another time')
-    xbmcplugin.addDirectoryItem(int(sys.argv[1]), sys.argv[0]+'?mode=dayperiod', listitem, isFolder=True)
-
-if mode=='dayperiod':
+    add_dir('Concierge ({0!s} {1!s})'.format(day_name[sz_day],period_name[sz_period]),'?mode=situation&sz_day='+str(sz_day)+'&sz_period='+str(sz_period))
+    add_dir('Choose another time','?mode=day')
+    add_dir('Popular','?mode=popular')
+    add_dir('Browse All','?mode=browse')
+    
+if mode=='day':
     for (day_id, day_title) in day_name.items():
-        for (period_id, period_title) in period_name.items():
-            listitem = xbmcgui.ListItem(day_title+" "+period_title)
-            if not xbmcplugin.addDirectoryItem(int(sys.argv[1]), sys.argv[0]+'?mode=situation&sz_day='+str(day_id)+'&sz_period='+str(period_id), listitem, isFolder=True): break
+        add_dir(day_title,'?mode=period&sz_day='+str(day_id))
+
+if mode=='period':
+    for (period_id, period_title) in period_name.items():
+        sz_day=str(params['sz_day'])
+        add_dir(period_title,'?mode=situation&sz_day='+sz_day+'&sz_period='+str(period_id))
+
+#if mode=='popular':
+    
+
+#if mode=='browse':
+    
 
 if mode=='situation':
     xbmc.log('Situation Mode')
     sz_day=str(params['sz_day'])
     sz_period=str(params['sz_period'])
-    xbmcplugin.addDirectoryItem(int(sys.argv[1]), '', xbmcgui.ListItem('Day '+sz_day+', Period '+sz_period))
+    add_dir('Day '+sz_day+', Period '+sz_period) 
     
 xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)

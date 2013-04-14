@@ -1,4 +1,4 @@
-import sys
+import sys, xbmcgui, xbmcplugin
 
 # Get parameters script from Voinage's tutorial
 def get_params():
@@ -17,3 +17,8 @@ def get_params():
                     if (len(splitparams))==2:
                             param[splitparams[0]]=splitparams[1]
     return param
+	
+def add_dir(name, url=''):
+    li = xbmcgui.ListItem(str(name))
+    return xbmcplugin.addDirectoryItem(int(sys.argv[1]), sys.argv[0]+str(url), li, isFolder=True)
+    
