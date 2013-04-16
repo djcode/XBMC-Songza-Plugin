@@ -10,7 +10,7 @@ def ListStations():
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
     
 def AddStation(name, id):
-    url = sys.argv[0] + '?station=' + str(id)
+    url = sys.argv[0] + '?mode=player&station=' + str(id)
     listItem = xbmcgui.ListItem(unicode(name), iconImage = 'DefaultMusicPlaylists.png')
     listItem.setInfo('music', {'title': name})
     return xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = url, listitem = listItem)
@@ -44,7 +44,7 @@ def QueueNextTrack(playlist, station):
     # Need to add codec info for XBMC to pick the correct player
     listItem.addStreamInfo('audio', {'codec': 'mp3'})
     
-    url = sys.argv[0] + '?station=' + str(station) + '&play=' + urllib.quote(next['listen_url'])
+    url = sys.argv[0] + '?mode=player&station=' + str(station) + '&play=' + urllib.quote(next['listen_url'])
     playlist.add(url, listItem)
 
 def PlayTrack(station, url):

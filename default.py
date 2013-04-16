@@ -79,7 +79,8 @@ if mode=='browse':
 
 if mode=='subbrowse':
     sz_browse=str(params['sz_browse'])
-    r = OpenUrl('http://songza.com/api/1/gallery/tag/'+sz_browse)
+    r = 'http://songza.com/api/1/gallery/tag/'+sz_browse
+    r = OpenUrl(r)
     r = json.loads(r)
     for item in r:
         add_dir(item['name'],'?mode=subbrowse&sz_browse='+item['id'])
@@ -88,15 +89,20 @@ if mode=='subbrowse':
 if mode=='stations':
     sz_stations=str(params['sz_stations'])
     f = open(os.path.join(appdata,sz_stations), 'r')
-    r = json.loads(f.read())
-    for id in r:
-        add_dir(id)
+    values = json.loads(f.read())
     f.close()
-
+    query = '&id='.join(str(v) for v in values)
+    r = 'http://songza.com/api/1/station/multi?id='+query
+    r = OpenUrl(r)
+    r = json.loads(r)
+    for item in r:
+        add_dir(item['name'],'?mode=player&station='+str(item['id']))
+    
 if mode=='situations':
     sz_day=str(params['sz_day'])
     sz_period=str(params['sz_period'])
-    r = OpenUrl('http://songza.com/api/1/situation/targeted?device=web&site=songza&current_date='+str(now.isoformat())+'&day='+sz_day+'&period='+sz_period)
+    r = 'http://songza.com/api/1/situation/targeted?device=web&site=songza&current_date='+str(now.isoformat())+'&day='+sz_day+'&period='+sz_period
+    r = OpenUrl(r)
     r = json.loads(r)
     for item in r:
         add_dir(item['title'],'?mode=situations2&sz_situation='+item['id'])
@@ -114,6 +120,12 @@ if mode=='situations2':
         f.write(json.dumps(item['station_ids']))
         f.close()
     fr.close()
-#if mode=='situation':
+    
+if mode=='player':
+    args = GetArguments()
+    if 'play' in args:
+        PlayTrack(args['station'][0], args['play'][0])
+    elif 'station' in args:
+        PlayStation(args['station'][0])
     
 xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
