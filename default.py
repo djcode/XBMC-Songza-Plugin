@@ -7,6 +7,7 @@ from resources.lib.functions import *
 from resources.lib.rlocas import *
 
 appdata = xbmc.validatePath(xbmc.translatePath(xbmcaddon.Addon('plugin.audio.songza').getAddonInfo('profile')))
+
 if not os.path.isdir(appdata):
     os.makedirs(appdata)
 #Day and Day-Period dictionaries
@@ -127,5 +128,6 @@ if mode=='player':
         PlayTrack(args['station'][0], args['play'][0])
     elif 'station' in args:
         PlayStation(args['station'][0])
-    
-xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
+
+if not mode=='player':
+    xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
