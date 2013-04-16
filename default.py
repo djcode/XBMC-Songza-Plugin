@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import sys
-#reload(sys)
-#sys.setdefaultencoding("utf-8")
 import os, datetime, xbmcplugin, xbmcgui, xbmc, xbmcaddon
 import simplejson as json
 #extra imports
@@ -42,17 +40,6 @@ elif now < (day_start+tdelta(hours=20)):
 else:
     sz_period = 4
 
-#Debug
-#print "The day is "+str(sz_day)+" and the period is "+str(sz_period)
-#print "Which is called "+day_name[sz_day]+" "+period_name[sz_period]
-#print day_start.isoformat()
-#print now.isoformat()
-
-#Menu Generation test
-#for (day_id, day_title) in day_name.items():
-#    for (period_id, period_title) in period_name.items():
-#        selected = "(Current)" if day_id == sz_day and period_id == sz_period else ""
-#        print day_title, period_title, selected
 mode=None
 params=get_params()
 try:
@@ -79,7 +66,6 @@ if mode=='popular':
     r = OpenUrl('http://songza.com/api/1/chart/name/songza/all-time')
     r = json.loads(r)
     for item in r:
-        #xbmc.log(item);
         add_dir(item['name'],'?mode=subpop&sz_popid='+str(item['id']))
         #f = open(os.path.join(appdata,item['id']), 'w+')
         #f.write(str(item['situations']))
@@ -89,15 +75,23 @@ if mode=='browse':
     r = OpenUrl('http://songza.com/api/1/tags')
     r = json.loads(r)
     for item in r:
-        add_dir(item['name'],'?mode=subbrowse&sz_browseid='+item['id'])
+        add_dir(item['name'],'?mode=subbrowse&sz_browse='+item['id'])
 
 if mode=='subbrowse':
-    sz_browseid=str(params['sz_browseid'])
-    r = OpenUrl('http://songza.com/api/1/gallery/tag/'+sz_browseid)
+    sz_browse=str(params['sz_browse'])
+    r = OpenUrl('http://songza.com/api/1/gallery/tag/'+sz_browse)
     r = json.loads(r)
     for item in r:
-        add_dir(item['name'],'?mode=subbrowse&sz_browseid='+item['id'])
+        add_dir(item['name'],'?mode=subbrowse&sz_browse='+item['id'])
 
+
+if mode=='stations':
+    sz_stations=str(params['sz_stations'])
+    f = open(os.path.join(appdata,sz_stations), 'r')
+    r = json.loads(f.read())
+    for id in r:
+        add_dir(id)
+    f.close()
 
 if mode=='situations':
     sz_day=str(params['sz_day'])
@@ -105,11 +99,21 @@ if mode=='situations':
     r = OpenUrl('http://songza.com/api/1/situation/targeted?device=web&site=songza&current_date='+str(now.isoformat())+'&day='+sz_day+'&period='+sz_period)
     r = json.loads(r)
     for item in r:
-        add_dir(item['title'],'?mode=situation&sz_situation='+item['id'])
+        add_dir(item['title'],'?mode=situations2&sz_situation='+item['id'])
         f = open(os.path.join(appdata,item['id']), 'w+')
-        f.write(str(item['situations']))
+        f.write(json.dumps(item['situations']))
         f.close()
 
+if mode=='situations2':
+    sz_situation=str(params['sz_situation'])
+    fr = open(os.path.join(appdata,sz_situation), 'r')
+    r = json.loads(fr.read())
+    for item in r:
+        add_dir(item['title'],'?mode=stations&sz_stations='+item['id'])
+        f = open(os.path.join(appdata,item['id']), 'w+')
+        f.write(json.dumps(item['station_ids']))
+        f.close()
+    fr.close()
 #if mode=='situation':
     
 xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
