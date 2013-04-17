@@ -62,7 +62,14 @@ def OpenUrl(url):
     request = urllib2.Request(url)
     request.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.20 (KHTML, like Gecko) Chrome/11.0.672.2 Safari/534.20')
     response = urllib2.urlopen(request)
-    contents = response.read()
+    xbmc.log(str(response.info().get('Content-Encoding')))
+    if response.info().get('Content-Encoding') == 'gzip':
+        import StringIO, gzip
+        buf = StringIO.StringIO(response.read())
+        f = gzip.GzipFile(fileobj=buf)
+        contents = f.read()
+    else:
+        contents = response.read()
     response.close()
     return contents
     
