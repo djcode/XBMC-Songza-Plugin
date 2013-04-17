@@ -19,6 +19,6 @@ def get_params():
     return param
 	
 def add_dir(name, url=''):
-    li = xbmcgui.ListItem(str(name))
+    li = xbmcgui.ListItem(unicode(name))
     return xbmcplugin.addDirectoryItem(int(sys.argv[1]), sys.argv[0]+str(url), li, isFolder=True)
     
