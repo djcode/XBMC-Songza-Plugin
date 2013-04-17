@@ -67,7 +67,7 @@ if mode=='popular':
     r = OpenUrl('http://songza.com/api/1/chart/name/songza/all-time')
     r = json.loads(r)
     for item in r:
-        add_dir(item['name'],'?mode=player&station='+str(item['id']),item['cover_url'])
+        add_file(item['name'],'?mode=player&station='+str(item['id']),item['cover_url'])
 
 if mode=='browse':
     r = OpenUrl('http://songza.com/api/1/tags')
@@ -96,7 +96,7 @@ if mode=='stations':
     r = OpenUrl(r)
     r = json.loads(r)
     for item in r:
-        add_dir(item['name'],'?mode=player&station='+str(item['id']),item['cover_url'])
+        add_file(item['name'],'?mode=player&station='+str(item['id']),item['cover_url'])
     
 if mode=='situations':
     sz_day=str(params['sz_day'])

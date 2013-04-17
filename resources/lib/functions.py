@@ -22,4 +22,8 @@ def add_dir(name, url='', image='', label2=''):
     li = xbmcgui.ListItem(unicode(name),label2,image,image)
     li.setThumbnailImage(image)
     return xbmcplugin.addDirectoryItem(int(sys.argv[1]), sys.argv[0]+str(url), li, isFolder=True)
-    
+
+def add_file(name, url='', image='', label2=''):
+    li = xbmcgui.ListItem(unicode(name),label2,image,image)
+    li.setThumbnailImage(image)
+    return xbmcplugin.addDirectoryItem(int(sys.argv[1]), sys.argv[0]+str(url), li, isFolder=False)
