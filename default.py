@@ -67,7 +67,7 @@ if mode=='popular':
     r = OpenUrl('http://songza.com/api/1/chart/name/songza/all-time')
     r = json.loads(r)
     for item in r:
-        add_dir(item['name'],'?mode=subpop&sz_popid='+str(item['id']))
+        add_dir(item['name'],'?mode=player&station='+str(item['id']))
         #f = open(os.path.join(appdata,item['id']), 'w+')
         #f.write(str(item['situations']))
         #f.close()
@@ -84,8 +84,10 @@ if mode=='subbrowse':
     r = OpenUrl(r)
     r = json.loads(r)
     for item in r:
-        add_dir(item['name'],'?mode=subbrowse&sz_browse='+item['id'])
-
+        add_dir(item['name'],'?mode=stations&sz_stations='+item['id'])
+        f = open(os.path.join(appdata,item['id']), 'w+')
+        f.write(json.dumps(item['station_ids']))
+        f.close()
 
 if mode=='stations':
     sz_stations=str(params['sz_stations'])
