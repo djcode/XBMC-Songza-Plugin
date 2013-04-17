@@ -67,10 +67,7 @@ if mode=='popular':
     r = OpenUrl('http://songza.com/api/1/chart/name/songza/all-time')
     r = json.loads(r)
     for item in r:
-        add_dir(item['name'],'?mode=player&station='+str(item['id']))
-        #f = open(os.path.join(appdata,item['id']), 'w+')
-        #f.write(str(item['situations']))
-        #f.close()
+        add_dir(item['name'],'?mode=player&station='+str(item['id']),item['cover_url'])
 
 if mode=='browse':
     r = OpenUrl('http://songza.com/api/1/tags')
@@ -99,7 +96,7 @@ if mode=='stations':
     r = OpenUrl(r)
     r = json.loads(r)
     for item in r:
-        add_dir(item['name'],'?mode=player&station='+str(item['id']))
+        add_dir(item['name'],'?mode=player&station='+str(item['id']),item['cover_url'])
     
 if mode=='situations':
     sz_day=str(params['sz_day'])
@@ -108,7 +105,7 @@ if mode=='situations':
     r = OpenUrl(r)
     r = json.loads(r)
     for item in r:
-        add_dir(item['title'],'?mode=situations2&sz_situation='+item['id'])
+        add_dir(item['title'],'?mode=situations2&sz_situation='+item['id'],item['icon'])
         f = open(os.path.join(appdata,item['id']), 'w+')
         f.write(json.dumps(item['situations']))
         f.close()
@@ -118,7 +115,7 @@ if mode=='situations2':
     fr = open(os.path.join(appdata,sz_situation), 'r')
     r = json.loads(fr.read())
     for item in r:
-        add_dir(item['title'],'?mode=stations&sz_stations='+item['id'])
+        add_dir(item['title'],'?mode=stations&sz_stations='+item['id'],item['icon'])
         f = open(os.path.join(appdata,item['id']), 'w+')
         f.write(json.dumps(item['station_ids']))
         f.close()

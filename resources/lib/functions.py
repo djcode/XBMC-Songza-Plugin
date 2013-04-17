@@ -18,7 +18,8 @@ def get_params():
                             param[splitparams[0]]=splitparams[1]
     return param
 	
-def add_dir(name, url=''):
-    li = xbmcgui.ListItem(unicode(name))
+def add_dir(name, url='', image='', label2=''):
+    li = xbmcgui.ListItem(unicode(name),label2,image,image)
+    li.setThumbnailImage(image)
     return xbmcplugin.addDirectoryItem(int(sys.argv[1]), sys.argv[0]+str(url), li, isFolder=True)
     
